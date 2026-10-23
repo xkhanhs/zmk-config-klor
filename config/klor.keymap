@@ -6,13 +6,9 @@
 // Firmware sends QWERTY keycodes; on the host VTX (Colemak mode) remaps them
 // to Colemak DH-Viet, so the comments show the character under DH-Viet.
 //
-// The matrix has 44 positions per layer. Each layer lists them as
-//   row 0: 5 left, 5 right
-//   row 1: outer + 5 left, 5 right + outer
-//   row 2: outer + 5 left, 2 encoder presses, 5 right + outer
-//   row 3: 4 left thumbs (outer -> inner), 4 right thumbs (inner -> outer)
-// The outer pinky cells, the encoder presses, and the innermost thumb on each
-// side were broken off or not fitted, so they stay &none.
+// The shield maps only the 36 keys of the build, in the Corne 5-column order:
+// three rows of 5 + 5, then left thumbs outer -> inner and right thumbs
+// inner -> outer. ZMK Studio is enabled on the left half.
 //
 // No reset button is fitted: FN + the left top-left key or the right
 // bottom-right key reboots that half into the bootloader.
@@ -42,10 +38,10 @@
 			// |  j  |  v  |  r  |  c  |  z  |   |  k  |  d  |  ,  |  .  |  /  |
 			//       | GUI |NAV/⇧| SPC |   | BSPC| SHFT| ENT |
 			bindings = <
-     &kp Q &kp W &kp E &kp R &kp T             &kp Y &kp U &kp I     &kp O   &kp P
-XXX  &kp A &kp S &kp D &kp F &kp G             &kp H &kp J &kp K     &kp L   &kp SEMI XXX
-XXX  &kp Z &kp X &kp C &kp V &kp B   XXX XXX   &kp N &kp M &kp COMMA &kp DOT &kp FSLH XXX
-     &kp LGUI &nav_shift 1 LSHFT &kp SPACE XXX   XXX &kp BSPC &kp LSHFT &kp RET
+&kp Q &kp W &kp E &kp R &kp T   &kp Y &kp U &kp I     &kp O   &kp P
+&kp A &kp S &kp D &kp F &kp G   &kp H &kp J &kp K     &kp L   &kp SEMI
+&kp Z &kp X &kp C &kp V &kp B   &kp N &kp M &kp COMMA &kp DOT &kp FSLH
+      &kp LGUI &nav_shift 1 LSHFT &kp SPACE   &kp BSPC &kp LSHFT &kp RET
 			>;
 		};
 
@@ -59,10 +55,10 @@ XXX  &kp Z &kp X &kp C &kp V &kp B   XXX XXX   &kp N &kp M &kp COMMA &kp DOT &kp
 			// | SHFT |  (   |  )   | SHOT4|  FN  |   |  =   |  1   |  2   |  3   |  .   |
 			//               |      | held |      |   | DELW |  0   | S-ENT|
 			bindings = <
-     &kp ESC   &kp LBKT &kp UP   &kp RBKT       &kp TAB              &kp FSLH  &kp N7 &kp N8 &kp N9 &kp MINUS
-XXX  &kp LGUI  &kp LEFT &kp DOWN &kp RIGHT      &kp LG(TAB)          &kp STAR  &kp N4 &kp N5 &kp N6 &kp PLUS  XXX
-XXX  &kp LSHFT &kp LPAR &kp RPAR &kp LG(LS(N4)) &mo 2      XXX XXX   &kp EQUAL &kp N1 &kp N2 &kp N3 &kp DOT   XXX
-     &trans &trans &trans XXX   XXX &kp LA(BSPC) &kp N0 &kp LS(RET)
+&kp ESC   &kp LBKT &kp UP   &kp RBKT       &kp TAB       &kp FSLH  &kp N7 &kp N8 &kp N9 &kp MINUS
+&kp LGUI  &kp LEFT &kp DOWN &kp RIGHT      &kp LG(TAB)   &kp STAR  &kp N4 &kp N5 &kp N6 &kp PLUS
+&kp LSHFT &kp LPAR &kp RPAR &kp LG(LS(N4)) &mo 2         &kp EQUAL &kp N1 &kp N2 &kp N3 &kp DOT
+                   &trans   &trans         &trans        &kp LA(BSPC) &kp N0 &kp LS(RET)
 			>;
 		};
 
@@ -78,10 +74,10 @@ XXX  &kp LSHFT &kp LPAR &kp RPAR &kp LG(LS(N4)) &mo 2      XXX XXX   &kp EQUAL &
 			// |      |      |      |      |      |   | C-3  | MUTE | VOL- | VOL+ | PLAY |
 			// |      |      |      |      | held |   | C-c  |  ?   |  '   |  "   | BOOT |
 			bindings = <
-     &bootloader XXX XXX XXX XXX                &kp LS(Y)  &kp LC(N4) &kp C_BRI_DN &kp C_BRI_UP &bt BT_CLR
-XXX  XXX XXX XXX XXX XXX                        &kp LC(N3) &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp C_PP    XXX
-XXX  XXX XXX XXX XXX &trans   XXX XXX           &kp LC(V)  &kp QMARK  &kp SQT      &kp DQT      &bootloader XXX
-     &trans &trans &trans XXX   XXX &trans &trans &trans
+&bootloader XXX XXX XXX XXX      &kp LS(Y)  &kp LC(N4) &kp C_BRI_DN &kp C_BRI_UP &bt BT_CLR
+XXX         XXX XXX XXX XXX      &kp LC(N3) &kp C_MUTE &kp C_VOL_DN &kp C_VOL_UP &kp C_PP
+XXX         XXX XXX XXX &trans   &kp LC(V)  &kp QMARK  &kp SQT      &kp DQT      &bootloader
+            &trans &trans &trans   &trans &trans &trans
 			>;
 		};
 	};
