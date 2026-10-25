@@ -19,14 +19,15 @@
 
 / {
 	behaviors {
-		nav_shift: nav_shift {
+		shift_nav: shift_nav {
 			compatible = "zmk,behavior-hold-tap";
 			#binding-cells = <2>;
-			// balanced: a key pressed and released while NAV is down makes it
-			// a hold at once, so NAV + digit or arrow does not wait.
-			flavor = "balanced";
+			// Held it is Shift, tapped it toggles NAV on or off. hold-preferred:
+			// any key pressed while it is down makes it Shift, so a fast roll
+			// into a capital never toggles NAV and types a digit instead.
+			flavor = "hold-preferred";
 			tapping-term-ms = <200>;
-			bindings = <&mo>, <&sk>;
+			bindings = <&kp>, <&tog>;
 		};
 	};
 
@@ -39,12 +40,12 @@
 			// |  q  |  w  |  f  |  g  |  b  |   |  :  |  l  |  u  |  y  |  x  |
 			// |  a  |  h  |  s  |  t  |  p  |   |  m  |  n  |  e  |  o  |  i  |
 			// |  j  |  v  |  r  |  c  |  z  |   |  k  |  d  |  ,  |  .  |  /  |
-			//       | GUI |NAV/⇧| SPC |   | BSPC| SHFT| ENT |
+			//       | GUI |⇧/NAV| SPC |   | BSPC| SHFT| ENT |
 			bindings = <
 &kp Q &kp W &kp E &kp R &kp T   &kp LS(Y) &kp U &kp I &kp O   &kp P
 &kp A &kp S &kp D &kp F &kp G   &kp H &kp J &kp K     &kp L   &kp SEMI
 &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M &kp COMMA &kp DOT &kp FSLH
-      &kp LGUI &nav_shift 1 LSHFT &kp SPACE   &kp BSPC &kp LSHFT &kp RET
+      &kp LGUI &shift_nav LSHFT 1 &kp SPACE   &kp BSPC &kp LSHFT &kp RET
 			>;
 		};
 
@@ -52,23 +53,24 @@
 			display-name = "NAV";
 			// Left hand moves, right hand is a numpad. CMDTAB returns to the
 			// last app in one press, SHOT4 is Cmd+Shift+4, FN is held on top
-			// of NAV, DELW deletes a word (Alt+Backspace).
+			// of NAV. NAV stays on until the ⇧/NAV key is tapped again, so
+			// Backspace is plain here: a stray digit must not take a word.
 			// | ESC  |  [   |  UP  |  ]   | TAB  |   |  /   |  7   |  8   |  9   |  -   |
 			// | GUI  | LEFT | DOWN | RGHT |CMDTAB|   |  *   |  4   |  5   |  6   |  +   |
 			// | SHFT |  (   |  )   | SHOT4|  FN  |   |  =   |  1   |  2   |  3   |  .   |
-			//               |      | held |      |   | DELW |  0   | S-ENT|
+			//               |      | off  |      |   | BSPC |  0   | S-ENT|
 			bindings = <
 &kp ESC   &kp LBKT &kp UP   &kp RBKT       &kp TAB       &kp FSLH  &kp N7 &kp N8 &kp N9 &kp MINUS
 &kp LGUI  &kp LEFT &kp DOWN &kp RIGHT      &kp LG(TAB)   &kp STAR  &kp N4 &kp N5 &kp N6 &kp PLUS
 &kp LSHFT &kp LPAR &kp RPAR &kp LG(LS(N4)) &mo 2         &kp EQUAL &kp N1 &kp N2 &kp N3 &kp DOT
-                   &trans   &trans         &trans        &kp LA(BSPC) &kp N0 &kp LS(RET)
+                   &trans   &trans         &trans        &kp BSPC &kp N0 &kp LS(RET)
 			>;
 		};
 
 		fn_layer {
 			display-name = "FN";
-			// Everything usable is on the right hand: the left hand holds NAV
-			// and FN. Empty cells are &none so a stray touch does not type a
+			// Everything usable is on the right hand: the left index holds FN
+			// while NAV is on. Empty cells are &none so a stray touch does not type a
 			// NAV digit. BTCLR clears the selected Bluetooth profile. C-4 and
 			// C-3 pick an input source directly (on the Corne they sit on the
 			// outer column, which the KLOR does not have). BOOT reboots that
