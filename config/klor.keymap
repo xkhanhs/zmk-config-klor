@@ -29,6 +29,17 @@
 			tapping-term-ms = <200>;
 			bindings = <&kp>, <&tog>;
 		};
+
+		shift_fn: shift_fn {
+			compatible = "zmk,behavior-hold-tap";
+			#binding-cells = <2>;
+			// Held it is Shift, tapped it turns FN on for the next key only:
+			// FN is mostly one symbol at a time. Same hold-preferred reasoning
+			// as shift_nav.
+			flavor = "hold-preferred";
+			tapping-term-ms = <200>;
+			bindings = <&kp>, <&sl>;
+		};
 	};
 
 	keymap {
@@ -40,12 +51,12 @@
 			// |  q  |  w  |  f  |  g  |  b  |   |  :  |  l  |  u  |  y  |  x  |
 			// |  a  |  h  |  s  |  t  |  p  |   |  m  |  n  |  e  |  o  |  i  |
 			// |  j  |  v  |  r  |  c  |  z  |   |  k  |  d  |  ,  |  .  |  /  |
-			//       | GUI |⇧/NAV| SPC |   | BSPC| SHFT| ENT |
+			//       | GUI |⇧/NAV| SPC |   | BSPC|⇧/FN | ENT |
 			bindings = <
 &kp Q &kp W &kp E &kp R &kp T   &kp LS(Y) &kp U &kp I &kp O   &kp P
 &kp A &kp S &kp D &kp F &kp G   &kp H &kp J &kp K     &kp L   &kp SEMI
 &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M &kp COMMA &kp DOT &kp FSLH
-      &kp LGUI &shift_nav LSHFT 1 &kp SPACE   &kp BSPC &kp LSHFT &kp RET
+      &kp LGUI &shift_nav LSHFT 1 &kp SPACE   &kp BSPC &shift_fn LSHFT 2 &kp RET
 			>;
 		};
 
@@ -69,9 +80,9 @@
 
 		fn_layer {
 			display-name = "FN";
-			// Everything usable is on the right hand: the left index holds FN
-			// while NAV is on. Empty cells are &none so a stray touch does not type a
-			// NAV digit. BTCLR clears the selected Bluetooth profile. C-4 and
+			// Everything usable is on the right hand. Tap the right ⇧/FN thumb
+			// for one FN key, or hold the left index on FN while NAV is on.
+			// Empty cells are &none so a stray touch does not type a NAV digit. BTCLR clears the selected Bluetooth profile. C-4 and
 			// C-3 pick an input source directly (on the Corne they sit on the
 			// outer column, which the KLOR does not have). BOOT reboots that
 			// half into the bootloader for flashing. The ; cell sends Y, which
