@@ -3,8 +3,8 @@
 #include <dt-bindings/zmk/bt.h>
 
 // KLOR Saegewerk, 36 keys: the Corne layout from xkhanhs/zmk-config-corne,
-// except the ;/: key on BASE and the right hand of FN. This file matches what
-// was saved in ZMK Studio on 2026-10-25.
+// except the ;/: key on BASE, the two middle thumbs and the right hand of FN.
+// This file matches what was saved in ZMK Studio on 2026-11-03.
 // Firmware sends QWERTY keycodes; on the host VTX (Colemak mode) remaps them
 // to Colemak DH-Viet, so the comments show the character under DH-Viet.
 //
@@ -13,39 +13,32 @@
 // inner -> outer. ZMK Studio is enabled on the left half.
 //
 // No reset button is fitted: FN + the left top-left key or the right
-// bottom-right key reboots that half into the bootloader.
+// bottom-right key reboots that half into the bootloader. FN is NAV held
+// with the left index held on B.
 
 #define XXX &none
 
 / {
-	behaviors {
-		shift_nav: shift_nav {
-			compatible = "zmk,behavior-hold-tap";
-			#binding-cells = <2>;
-			// Held it is Shift, tapped it toggles NAV on or off. hold-preferred:
-			// any key pressed while it is down makes it Shift, so a fast roll
-			// into a capital never toggles NAV and types a digit instead.
-			flavor = "hold-preferred";
-			tapping-term-ms = <200>;
-			bindings = <&kp>, <&tog>;
-		};
-	};
-
 	keymap {
 		compatible = "zmk,keymap";
 
 		default_layer {
 			display-name = "BASE";
 			// The ; key of DH-Viet sends Shift so it types ":"; plain ";" is on FN.
+			// The right middle thumb is Shift held and Tab tapped, so Cmd+Tab is
+			// the left thumb holding GUI and the right thumb tapping, and each
+			// further tap moves on through the app switcher. &mt is
+			// hold-preferred, so a key pressed while it is down is shifted.
+			// It is the only Shift: the left middle thumb only holds NAV.
 			// |  q  |  w  |  f  |  g  |  b  |   |  :  |  l  |  u  |  y  |  x  |
 			// |  a  |  h  |  s  |  t  |  p  |   |  m  |  n  |  e  |  o  |  i  |
 			// |  j  |  v  |  r  |  c  |  z  |   |  k  |  d  |  ,  |  .  |  /  |
-			//       | GUI |⇧/NAV| SPC |   | BSPC| SHFT| ENT |
+			//       | GUI | NAV | SPC |   | BSPC|⇧/TAB| ENT |
 			bindings = <
 &kp Q &kp W &kp E &kp R &kp T   &kp LS(Y) &kp U &kp I &kp O   &kp P
 &kp A &kp S &kp D &kp F &kp G   &kp H &kp J &kp K     &kp L   &kp SEMI
 &kp Z &kp X &kp C &kp V &kp B   &kp N &kp M &kp COMMA &kp DOT &kp FSLH
-      &kp LGUI &shift_nav LSHFT 1 &kp SPACE   &kp BSPC &kp LSHFT &kp RET
+      &kp LGUI &mo 1 &kp SPACE   &kp BSPC &mt LSHFT TAB &kp RET
 			>;
 		};
 
@@ -53,12 +46,12 @@
 			display-name = "NAV";
 			// Left hand moves, right hand is a numpad. CMDTAB returns to the
 			// last app in one press, SHOT4 is Cmd+Shift+4, FN is held on top
-			// of NAV. NAV stays on until the ⇧/NAV key is tapped again, so
-			// Backspace is plain here: a stray digit must not take a word.
+			// of NAV. NAV is on only while its thumb is held. Backspace is
+			// plain here: a stray digit must not take a word.
 			// | ESC  |  [   |  UP  |  ]   | TAB  |   |  /   |  7   |  8   |  9   |  -   |
 			// | GUI  | LEFT | DOWN | RGHT |CMDTAB|   |  *   |  4   |  5   |  6   |  +   |
 			// | SHFT |  (   |  )   | SHOT4|  FN  |   |  =   |  1   |  2   |  3   |  .   |
-			//               |      | off  |      |   | BSPC |  0   | S-ENT|
+			//               |      | held |      |   | BSPC |  0   | S-ENT|
 			bindings = <
 &kp ESC   &kp LBKT &kp UP   &kp RBKT       &kp TAB       &kp FSLH  &kp N7 &kp N8 &kp N9 &kp MINUS
 &kp LGUI  &kp LEFT &kp DOWN &kp RIGHT      &kp LG(TAB)   &kp STAR  &kp N4 &kp N5 &kp N6 &kp PLUS
@@ -70,12 +63,12 @@
 		fn_layer {
 			display-name = "FN";
 			// Everything usable is on the right hand: the left index holds FN
-			// while NAV is on. Empty cells are &none so a stray touch does not type a
-			// NAV digit. BTCLR clears the selected Bluetooth profile. C-4 and
-			// C-3 pick an input source directly (on the Corne they sit on the
-			// outer column, which the KLOR does not have). BOOT reboots that
-			// half into the bootloader for flashing. The ; cell sends Y, which
-			// is ; on DH-Viet.
+			// while the left thumb holds NAV. Empty cells are &none so a stray
+			// touch does not type a NAV digit. BTCLR clears the selected
+			// Bluetooth profile. C-4 and C-3 pick an input source directly (on
+			// the Corne they sit on the outer column, which the KLOR does not
+			// have). BOOT reboots that half into the bootloader for flashing.
+			// The ; cell sends Y, which is ; on DH-Viet.
 			// | BOOT |      |      |      |      |   |  ;   |  @   | MUTE | BRI+ | BTCLR|
 			// |      |      |      |      |      |   |  "   |  ?   | VOL+ | BRI- |      |
 			// |      |      |      |      | held |   | C-c  | C-4  | VOL- | C-3  | BOOT |
