@@ -46,17 +46,17 @@
 			display-name = "NAV";
 			// Left hand moves, right hand is a numpad. CMDTAB returns to the
 			// last app in one press, SHOT4 is Cmd+Shift+4, FN is held on top
-			// of NAV. NAV is on only while its thumb is held. Backspace is
-			// plain here: a stray digit must not take a word.
+			// of NAV. NAV is on only while its thumb is held. DELWD is
+			// Option+Backspace, delete word, as on the Corne.
 			// | ESC  |  [   |  UP  |  ]   | TAB  |   |  /   |  7   |  8   |  9   |  -   |
 			// | GUI  | LEFT | DOWN | RGHT |CMDTAB|   |  *   |  4   |  5   |  6   |  +   |
 			// | SHFT |  (   |  )   | SHOT4|  FN  |   |  =   |  1   |  2   |  3   |  .   |
-			//               |      | held |      |   | BSPC |  0   | S-ENT|
+			//               |      | held |      |   | DELWD|  0   | S-ENT|
 			bindings = <
 &kp ESC   &kp LBKT &kp UP   &kp RBKT       &kp TAB       &kp FSLH  &kp N7 &kp N8 &kp N9 &kp MINUS
 &kp LGUI  &kp LEFT &kp DOWN &kp RIGHT      &kp LG(TAB)   &kp STAR  &kp N4 &kp N5 &kp N6 &kp PLUS
 &kp LSHFT &kp LPAR &kp RPAR &kp LG(LS(N4)) &mo 2         &kp EQUAL &kp N1 &kp N2 &kp N3 &kp DOT
-                   &trans   &trans         &trans        &kp BSPC &kp N0 &kp LS(RET)
+                   &trans   &trans         &trans        &kp LA(BSPC) &kp N0 &kp LS(RET)
 			>;
 		};
 
