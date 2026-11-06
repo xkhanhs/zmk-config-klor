@@ -8,3 +8,12 @@ include:
     shield: klor_right
   - board: nice_nano_v2
     shield: settings_reset
+  # Temporary debug build: left half with debug logs over USB, to trace a Shift
+  # that sticks when the right half is running before the left half boots.
+  # Logs are buffered for 6 s after boot so a serial reader can attach first.
+  # Studio is left out because it would need a second USB serial port.
+  - board: nice_nano_v2
+    shield: klor_left
+    snippet: zmk-usb-logging
+    artifact-name: klor_left_usb_log
+    cmake-args: -DCONFIG_ZMK_LOG_LEVEL_DBG=y -DCONFIG_LOG_BUFFER_SIZE=32768 -DCONFIG_LOG_PROCESS_THREAD_STARTUP_DELAY_MS=6000 -DCONFIG_USB_CDC_ACM_RINGBUF_SIZE=8192
